@@ -163,7 +163,7 @@ const apy = async function () {
         chain,
         project: 'csigma-finance',
         symbol: tokenSymbol,
-        tvlUsd: tvl / decimals,
+        tvlUsd: (tvl * 1.0) / decimals,
         apyBase: apr,
         rewardTokens: [],
         underlyingTokens: vaults,
