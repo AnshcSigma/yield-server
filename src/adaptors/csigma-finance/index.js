@@ -95,69 +95,69 @@ const apy = async function () {
       const { address, networkId, apr, vaults, assetOracleAddress } = ybt;
       const chain = (chainIdToName[networkId] || 'unknown').toLowerCase();
 
-      const { output: tvl } = await sdk.api.abi.call({
-        target: assetOracleAddress,
-        abi: {
-          "inputs": [],
-          "name": "totalAssetsUSD",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "totalValue",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        chain,
-      });
-
-
-      const { output: decimals } = await sdk.api.abi.call({
-        target: assetOracleAddress,
-        abi: {
-          "inputs": [],
-          "name": "DECIMALS",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        chain,
-      });
-
-
-      const [{ output: tokenSymbol }, { output: tokenName }] =
-        await Promise.all([
-          sdk.api.abi.call({
-            target: address,
-            abi: 'erc20:symbol',
-            chain,
-          }),
-          sdk.api.abi.call({
-            target: address,
-            abi: {
-              "inputs": [],
-              "name": "name",
-              "outputs": [
-                {
-                  "internalType": "string",
-                  "name": "",
-                  "type": "string"
-                }
-              ],
-              "stateMutability": "view",
-              "type": "function"
-            },
-            chain,
-          }),
-        ]);
+      const [
+        { output: tvl },
+        { output: decimals },
+        { output: tokenSymbol },
+        { output: tokenName },
+      ] = await Promise.all([
+        sdk.api.abi.call({
+          target: assetOracleAddress,
+          abi: {
+            "inputs": [],
+            "name": "totalAssetsUSD",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "totalValue",
+                "type": "uint256"
+              },
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          chain,
+        }),
+        sdk.api.abi.call({
+          target: assetOracleAddress,
+          abi: {
+            "inputs": [],
+            "name": "DECIMALS",
+            "outputs": [
+              {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+              },
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          chain,
+        }),
+        sdk.api.abi.call({
+          target: address,
+          abi: 'erc20:symbol',
+          chain,
+        }),
+        sdk.api.abi.call({
+          target: address,
+          abi: {
+            "inputs": [],
+            "name": "name",
+            "outputs": [
+              {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+              }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+          },
+          chain,
+        }),
+      ]);
       pools.push({
         pool: `${address}-${chain}`,
         chain,
